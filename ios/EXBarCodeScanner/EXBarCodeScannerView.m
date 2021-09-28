@@ -109,6 +109,89 @@
                                  }];
 }
 
+- (void)updateFocusMode
+{
+  AVCaptureDevice *device = [_videoCaptureDeviceInput device];
+  NSError *error = nil;
+
+  if (![device lockForConfiguration:&error]) {
+    if (error) {
+      UMLogInfo(@"%s: %@", __func__, error);
+    }
+    return;
+  }
+
+  if ([device isFocusModeSupported:_autoFocus]) {
+    if ([device lockForConfiguration:&error]) {
+      [device setFocusMode:_autoFocus];
+    } else {
+      if (error) {
+        UMLogInfo(@"%s: %@", __func__, error);
+      }
+    }
+  }
+
+  [device unlockForConfiguration];
+}
+
+- (void)updateFlashMode
+{
+  AVCaptureDevice *device = [_videoCaptureDeviceInput device];
+  NSError *error = nil;
+
+  if (_flashMode == EXCameraFlashModeTorch) {
+    if (![device hasTorch]) {
+      return;
+    }
+
+    if (![device lockForConfiguration:&error]) {
+      if (error) {
+        UMLogInfo(@"%s: %@", __func__, error);
+      }
+      return;
+    }
+
+    if ([device hasTorch] && [device isTorchModeSupported:AVCaptureTorchModeOn]) {
+      if ([device lockForConfiguration:&error]) {
+        [device setTorchMode:AVCaptureTorchModeOn];
+        [device unlockForConfiguration];
+      } else {
+        if (error) {
+          UMLogInfo(@"%s: %@", __func__, error);
+        }
+      }
+    }
+  } else {
+    if (![device hasFlash]) {
+      return;
+    }
+
+    if (![device lockForConfiguration:&error]) {
+      if (error) {
+        UMLogInfo(@"%s: %@", __func__, error);
+      }
+      return;
+    }
+
+    if ([device hasFlash])
+    {
+      if ([device lockForConfiguration:&error]) {
+        if ([device isTorchModeSupported:AVCaptureTorchModeOff]) {
+          [device setTorchMode:AVCaptureTorchModeOff];
+        }
+        [device unlockForConfiguration];
+      } else {
+        if (error) {
+          UMLogInfo(@"%s: %@", __func__, error);
+        }
+      }
+    }
+  }
+
+  [device unlockForConfiguration];
+}
+
+
 # pragma mark - lifecycle
 
 - (void)layoutSubviews

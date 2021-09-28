@@ -35,6 +35,16 @@ UM_EXPORT_MODULE(ExpoBarCodeScannerModule);
                @"back" : @(EXCameraTypeBack),
                },
            @"BarCodeType": [EXBarCodeScannerUtils validBarCodeTypes],
+            @"Type" :
+             @{@"front" : @(EXCameraTypeFront), @"back" : @(EXCameraTypeBack)},
+           @"FlashMode" : @{
+               @"off" : @(EXCameraFlashModeOff),
+               @"on" : @(EXCameraFlashModeOn),
+               @"auto" : @(EXCameraFlashModeAuto),
+               @"torch" : @(EXCameraFlashModeTorch)
+               },
+           @"AutoFocus" :
+             @{@"on" : @(EXCameraAutoFocusOn), @"off" : @(EXCameraAutoFocusOff)},
            };
 }
 

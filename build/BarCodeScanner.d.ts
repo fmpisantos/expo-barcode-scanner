@@ -27,9 +27,47 @@ export declare type BarCodeEventCallbackArguments = {
 };
 export declare type BarCodeScannedCallback = (params: BarCodeEvent) => void;
 export { PermissionResponse, PermissionStatus };
+export declare enum FlashMode {
+    /**
+     * @platforms ios, android, web
+     */
+    on = "on",
+    /**
+     * @platforms ios, android, web
+     */
+    off = "off",
+    /**
+     * @platforms ios, android, web
+     */
+    auto = "auto",
+    /**
+     * @platforms ios, android, web
+     */
+    torch = "torch"
+}
+export declare enum AutoFocus {
+    /**
+     * @platforms ios, android, web
+     */
+    on = "on",
+    /**
+     * @platforms ios, android, web
+     */
+    off = "off",
+    /**
+     * @platforms web
+     */
+    auto = "auto",
+    /**
+     * @platforms web
+     */
+    singleShot = "singleShot"
+}
 export interface BarCodeScannerProps extends ViewProps {
     type?: 'front' | 'back' | number;
     barCodeTypes?: string[];
+    flashMode?: number | keyof typeof FlashMode;
+    autoFocus?: boolean | number | keyof typeof AutoFocus;
     onBarCodeScanned?: BarCodeScannedCallback;
 }
 export declare class BarCodeScanner extends React.Component<BarCodeScannerProps> {
@@ -42,12 +80,18 @@ export declare class BarCodeScanner extends React.Component<BarCodeScannerProps>
     static Constants: {
         BarCodeType: any;
         Type: any;
+        FlashMode: any;
+        AutoFocus: any;
     };
     static ConversionTables: {
         type: any;
+        flashMode: Record<"on" | "off" | "auto" | "torch", string | number | undefined>;
+        autoFocus: Record<"on" | "off" | "auto" | "singleShot", string | number | boolean | undefined>;
     };
     static defaultProps: {
         type: any;
+        flashMode: "off";
+        autoFocus: "auto"
         barCodeTypes: unknown[];
     };
     static getPermissionsAsync(): Promise<PermissionResponse>;
@@ -60,4 +104,6 @@ export declare class BarCodeScanner extends React.Component<BarCodeScannerProps>
 export declare const Constants: {
     BarCodeType: any;
     Type: any;
+    FlashMode: any;
+    AutoFocus: any;
 }, getPermissionsAsync: typeof BarCodeScanner.getPermissionsAsync, requestPermissionsAsync: typeof BarCodeScanner.requestPermissionsAsync;

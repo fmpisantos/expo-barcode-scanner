@@ -3,6 +3,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <UMCore/UMViewManager.h>
 #import <UMCore/UMModuleRegistryConsumer.h>
+#import <EXBarCodeScanner/EXBarCodeScannerView.h>
 
 @interface EXBarCodeScannerViewManager : UMViewManager <UMModuleRegistryConsumer>
 

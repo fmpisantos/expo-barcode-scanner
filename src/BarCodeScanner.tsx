@@ -5,6 +5,9 @@ import { Platform, ViewProps } from 'react-native';
 
 import ExpoBarCodeScannerModule from './ExpoBarCodeScannerModule';
 import ExpoBarCodeScannerView from './ExpoBarCodeScannerView';
+import CameraManager from 'expo-camera/src/ExponentCameraManager';
+
+import { ConversionTables, ensureNativeProps } from 'expo-camera/src/utils/props';
 
 const { BarCodeType, Type } = ExpoBarCodeScannerModule;
 
@@ -47,6 +50,8 @@ export { PermissionResponse, PermissionStatus };
 export interface BarCodeScannerProps extends ViewProps {
   type?: 'front' | 'back' | number;
   barCodeTypes?: string[];
+  flashMode?: "off" | "on" | "auto" | "torch",
+  autoFocus?: "on" | "off",
   onBarCodeScanned?: BarCodeScannedCallback;
 }
 
@@ -57,15 +62,21 @@ export class BarCodeScanner extends React.Component<BarCodeScannerProps> {
   static Constants = {
     BarCodeType,
     Type,
+    FlashMode: CameraManager.FlashMode,
+    AutoFocus: CameraManager.AutoFocus,
   };
 
   static ConversionTables = {
     type: Type,
+    flashMode: ConversionTables.flashMode,
+    autoFocus: ConversionTables.autoFocus
   };
 
   static defaultProps = {
     type: Type.back,
     barCodeTypes: Object.values(BarCodeType),
+    autoFocus: CameraManager.AutoFocus.on,
+    flashMode: CameraManager.FlashMode.off,
   };
 
   static async getPermissionsAsync(): Promise<PermissionResponse> {
@@ -101,7 +112,8 @@ export class BarCodeScanner extends React.Component<BarCodeScannerProps> {
   }
 
   render() {
-    const nativeProps = this.convertNativeProps(this.props);
+    const nativeProps = ensureNativeProps(this.props);
+    console.log(nativeProps)
     const { onBarCodeScanned } = this.props;
     return (
       <ExpoBarCodeScannerView

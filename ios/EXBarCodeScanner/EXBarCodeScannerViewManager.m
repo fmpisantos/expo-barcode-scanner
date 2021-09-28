@@ -50,4 +50,22 @@ UM_VIEW_PROPERTY(barCodeTypes, NSArray *, EXBarCodeScannerView)
   [view setBarCodeTypes:value];
 }
 
+UM_VIEW_PROPERTY(flashMode, NSNumber *, EXBarCodeScannerView)
+{
+  long longValue = [value longValue];
+  if (longValue != view.flashMode) {
+    [view setFlashMode:longValue];
+    [view updateFlashMode];
+  }
+}
+
+UM_VIEW_PROPERTY(autoFocus, NSNumber *, EXBarCodeScannerView)
+{
+  long longValue = [value longValue];
+  if (longValue != view.autoFocus) {
+    [view setAutoFocus:longValue];
+    [view updateFocusMode];
+  }
+}
+
 @end

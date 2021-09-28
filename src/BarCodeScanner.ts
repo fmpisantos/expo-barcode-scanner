@@ -3,8 +3,8 @@ import { PermissionResponse, PermissionStatus } from 'expo-modules-core';
 import * as React from 'react';
 import { Platform, ViewProps } from 'react-native';
 
-import ExpoBarCodeScannerModule from './ExpoBarCodeScannerModule';
-import ExpoBarCodeScannerView from './ExpoBarCodeScannerView';
+import ExpoBarCodeScannerModule from 'expo-barcode-scanner/src/ExpoBarCodeScannerModule';
+import ExpoBarCodeScannerView from 'expo-barcode-scanner/src/ExpoBarCodeScannerView';
 import CameraManager from 'expo-camera/src/ExponentCameraManager';
 
 import { ConversionTables, ensureNativeProps } from 'expo-camera/src/utils/props';

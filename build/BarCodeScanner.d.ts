@@ -27,47 +27,11 @@ export declare type BarCodeEventCallbackArguments = {
 };
 export declare type BarCodeScannedCallback = (params: BarCodeEvent) => void;
 export { PermissionResponse, PermissionStatus };
-export declare enum FlashMode {
-    /**
-     * @platforms ios, android, web
-     */
-    on = "on",
-    /**
-     * @platforms ios, android, web
-     */
-    off = "off",
-    /**
-     * @platforms ios, android, web
-     */
-    auto = "auto",
-    /**
-     * @platforms ios, android, web
-     */
-    torch = "torch"
-}
-export declare enum AutoFocus {
-    /**
-     * @platforms ios, android, web
-     */
-    on = "on",
-    /**
-     * @platforms ios, android, web
-     */
-    off = "off",
-    /**
-     * @platforms web
-     */
-    auto = "auto",
-    /**
-     * @platforms web
-     */
-    singleShot = "singleShot"
-}
 export interface BarCodeScannerProps extends ViewProps {
     type?: 'front' | 'back' | number;
     barCodeTypes?: string[];
-    flashMode?: number | keyof typeof FlashMode;
-    autoFocus?: boolean | number | keyof typeof AutoFocus;
+    flashMode?: "off" | "on" | "auto" | "torch";
+    autoFocus?: "on" | "off";
     onBarCodeScanned?: BarCodeScannedCallback;
 }
 export declare class BarCodeScanner extends React.Component<BarCodeScannerProps> {
@@ -90,9 +54,9 @@ export declare class BarCodeScanner extends React.Component<BarCodeScannerProps>
     };
     static defaultProps: {
         type: any;
-        flashMode: "off";
-        autoFocus: "auto"
         barCodeTypes: unknown[];
+        autoFocus: any;
+        flashMode: any;
     };
     static getPermissionsAsync(): Promise<PermissionResponse>;
     static requestPermissionsAsync(): Promise<PermissionResponse>;

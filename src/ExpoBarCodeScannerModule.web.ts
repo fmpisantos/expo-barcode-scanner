@@ -12,7 +12,7 @@ function getUserMedia(constraints: MediaStreamConstraints): Promise<MediaStream>
 
   // First get ahold of the legacy getUserMedia, if present
   const getUserMedia =
-    navigator.getUserMedia ||
+    //navigator.getUserMedia ||
     (navigator as any).webkitGetUserMedia ||
     (navigator as any).mozGetUserMedia ||
     function() {
@@ -71,7 +71,7 @@ async function handlePermissionsQueryAsync(): Promise<PermissionResponse> {
     );
   }
 
-  const { state } = await navigator.permissions.query({ name: 'camera' });
+  /*const { state } = await navigator.permissions.query({ name: "camera" });
   switch (state) {
     case 'prompt':
       return {
@@ -87,14 +87,14 @@ async function handlePermissionsQueryAsync(): Promise<PermissionResponse> {
         canAskAgain: true,
         granted: true,
       };
-    case 'denied':
+    case 'denied':*/
       return {
         status: PermissionStatus.DENIED,
         expires: 'never',
         canAskAgain: true,
         granted: false,
       };
-  }
+//  }
 }
 
 export default {

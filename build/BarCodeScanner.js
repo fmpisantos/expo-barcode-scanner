@@ -2,31 +2,33 @@ import { UnavailabilityError } from '@unimodules/core';
 import { PermissionStatus } from 'expo-modules-core';
 import * as React from 'react';
 import { Platform } from 'react-native';
-import ExpoBarCodeScannerModule from './ExpoBarCodeScannerModule';
-import ExpoBarCodeScannerView from './ExpoBarCodeScannerView';
+import ExpoBarCodeScannerModule from 'expo-barcode-scanner/src/ExpoBarCodeScannerModule';
+import ExpoBarCodeScannerView from 'expo-barcode-scanner/src/ExpoBarCodeScannerView';
+import CameraManager from 'expo-camera/src/ExponentCameraManager';
+import { ConversionTables, ensureNativeProps } from 'expo-camera/src/utils/props';
 const { BarCodeType, Type } = ExpoBarCodeScannerModule;
 const EVENT_THROTTLE_MS = 500;
 export { PermissionStatus };
 export class BarCodeScanner extends React.Component {
-    constructor() {
-        super(...arguments);
-        this.lastEvents = {};
-        this.lastEventsTimes = {};
-        this.onObjectDetected = (callback) => ({ nativeEvent, }) => {
-            const { type } = nativeEvent;
-            if (this.lastEvents[type] &&
-                this.lastEventsTimes[type] &&
-                JSON.stringify(nativeEvent) === this.lastEvents[type] &&
-                Date.now() - this.lastEventsTimes[type] < EVENT_THROTTLE_MS) {
-                return;
-            }
-            if (callback) {
-                callback(nativeEvent);
-                this.lastEventsTimes[type] = new Date();
-                this.lastEvents[type] = JSON.stringify(nativeEvent);
-            }
-        };
-    }
+    lastEvents = {};
+    lastEventsTimes = {};
+    static Constants = {
+        BarCodeType,
+        Type,
+        FlashMode: CameraManager.FlashMode,
+        AutoFocus: CameraManager.AutoFocus,
+    };
+    static ConversionTables = {
+        type: Type,
+        flashMode: ConversionTables.flashMode,
+        autoFocus: ConversionTables.autoFocus
+    };
+    static defaultProps = {
+        type: Type.back,
+        barCodeTypes: Object.values(BarCodeType),
+        autoFocus: CameraManager.AutoFocus.on,
+        flashMode: CameraManager.FlashMode.off,
+    };
     static async getPermissionsAsync() {
         return ExpoBarCodeScannerModule.getPermissionsAsync();
     }
@@ -52,10 +54,24 @@ export class BarCodeScanner extends React.Component {
         return await ExpoBarCodeScannerModule.scanFromURLAsync(url, barCodeTypes);
     }
     render() {
-        const nativeProps = this.convertNativeProps(this.props);
+        const nativeProps = ensureNativeProps(this.props);
         const { onBarCodeScanned } = this.props;
-        return (React.createElement(ExpoBarCodeScannerView, Object.assign({}, nativeProps, { onBarCodeScanned: this.onObjectDetected(onBarCodeScanned) })));
+        return (React.createElement(ExpoBarCodeScannerView, { ...nativeProps, onBarCodeScanned: this.onObjectDetected(onBarCodeScanned) }));
     }
+    onObjectDetected = (callback) => ({ nativeEvent, }) => {
+        const { type } = nativeEvent;
+        if (this.lastEvents[type] &&
+            this.lastEventsTimes[type] &&
+            JSON.stringify(nativeEvent) === this.lastEvents[type] &&
+            Date.now() - this.lastEventsTimes[type] < EVENT_THROTTLE_MS) {
+            return;
+        }
+        if (callback) {
+            callback(nativeEvent);
+            this.lastEventsTimes[type] = new Date();
+            this.lastEvents[type] = JSON.stringify(nativeEvent);
+        }
+    };
     convertNativeProps(props) {
         const nativeProps = {};
         for (const [key, value] of Object.entries(props)) {
@@ -69,16 +85,5 @@ export class BarCodeScanner extends React.Component {
         return nativeProps;
     }
 }
-BarCodeScanner.Constants = {
-    BarCodeType,
-    Type,
-};
-BarCodeScanner.ConversionTables = {
-    type: Type,
-};
-BarCodeScanner.defaultProps = {
-    type: Type.back,
-    barCodeTypes: Object.values(BarCodeType),
-};
 export const { Constants, getPermissionsAsync, requestPermissionsAsync } = BarCodeScanner;
 //# sourceMappingURL=BarCodeScanner.js.map

@@ -8,8 +8,9 @@ function getUserMedia(constraints) {
     // with getUserMedia as it would overwrite existing properties.
     // Here, we will just add the getUserMedia property if it's missing.
     // First get ahold of the legacy getUserMedia, if present
-    const getUserMedia = navigator.getUserMedia ||
-        navigator.webkitGetUserMedia ||
+    const getUserMedia = 
+    //navigator.getUserMedia ||
+    navigator.webkitGetUserMedia ||
         navigator.mozGetUserMedia ||
         function () {
             const error = new Error('Permission unimplemented');
@@ -61,30 +62,30 @@ async function handlePermissionsQueryAsync() {
     if (!navigator?.permissions?.query) {
         throw new UnavailabilityError('expo-barcode-scanner', 'navigator.permissions API is not available');
     }
-    const { state } = await navigator.permissions.query({ name: 'camera' });
+    /*const { state } = await navigator.permissions.query({ name: "camera" });
     switch (state) {
-        case 'prompt':
-            return {
-                status: PermissionStatus.UNDETERMINED,
-                expires: 'never',
-                canAskAgain: true,
-                granted: false,
-            };
-        case 'granted':
-            return {
-                status: PermissionStatus.GRANTED,
-                expires: 'never',
-                canAskAgain: true,
-                granted: true,
-            };
-        case 'denied':
-            return {
-                status: PermissionStatus.DENIED,
-                expires: 'never',
-                canAskAgain: true,
-                granted: false,
-            };
-    }
+      case 'prompt':
+        return {
+          status: PermissionStatus.UNDETERMINED,
+          expires: 'never',
+          canAskAgain: true,
+          granted: false,
+        };
+      case 'granted':
+        return {
+          status: PermissionStatus.GRANTED,
+          expires: 'never',
+          canAskAgain: true,
+          granted: true,
+        };
+      case 'denied':*/
+    return {
+        status: PermissionStatus.DENIED,
+        expires: 'never',
+        canAskAgain: true,
+        granted: false,
+    };
+    //  }
 }
 export default {
     get name() {
